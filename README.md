@@ -6,33 +6,34 @@ Last "merge" date: 7th Sept 2022
 
 ## Changes from original repo
 
-- YOLOv7 can be used as a package, with minimal requirements for inference only
+- YOLOv7 can be used as a package, for inference only
+- Edited from `inference` branch to be able to use with RealSense cameras
+- (Supposedly) Dockerfile compatible with ARM architectures (change `--platform=linux/amd64 in Line 1 of Dockerfile`)
 
-## Using YOLOv7 as a package for inference
+## Quick Start with Docker
 
-- clone YOLOv7 repository (need not be in same folder as main project) and checkout `inference` branch
-- download desired weights using arguments to bash script
-```
-cd yolov7/weights
-./get_weights.sh yolov7 yolov7-e6
-```
-- make sure the requirements for YOLOv7 are installed
-- in the main project folder, install YOLOv7 as a package (takes some time to build)
-```
-python3 -m pip install --no-cache-dir /path/to/yolov7
-```
-OR as an editable package (if you need to make changes to the code, faster to build)
-```
-python3 -m pip install -e /path/to/yolov7
-```
-- import the YOLOv7 wrapper class for inference (refer to `scripts/inference.py` for example usage)
-```
-from yolov7.yolov7 import YOLOv7
-```
-
-## TODO
-
-- [x] figure out memory leak issue
+1. Clone YOLOv7 repository (need not be in same folder as main project) and checkout `realsense` branch
+1. Build the Docker image
+    ```
+    docker build -t yolov7-inference-rs .
+    ```
+1. Create and enter the Docker container
+    ```
+    bash run_docker.sh
+    ```
+1. Import the YOLOv7 and pyrealsense2 wrapper classes for inference OR use the provided scripts `scripts/inference_rs.py` `scripts/run_inference_rs.sh`
+    ```
+    import pyrealsense2 as rs
+    from yolov7.yolov7 import YOLOv7
+    ```
+    OR
+    ```
+    python scripts/inference_rs.py -w /path/to/weights -c /path/to/deploy/cfg --savepath /path/to/savepath --width desired_vid_width --height desired_vid_height --fps desired_fps
+    ```
+    OR
+    ```
+    bash scripts/run_inference_rs.sh
+    ```
 
 # Official YOLOv7
 
