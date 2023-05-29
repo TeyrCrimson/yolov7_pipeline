@@ -1,4 +1,4 @@
-# docker build -t yolov7-inference-rs -f Dockerfile.rs .
+# docker build -t yolov7-inference-rs .
 FROM --platform=linux/amd64 nvcr.io/nvidia/pytorch:22.12-py3
 
 ENV DEBIAN_FRONTEND=noninteractive
