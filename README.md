@@ -4,7 +4,7 @@
 
 Last "merge" date: 7th Sept 2022
 
-## Changes from original repo
+## Changes from Original Repo
 
 - YOLOv7 can be used as a package, for inference only
 - Edited from `inference` branch to be able to use with RealSense cameras
