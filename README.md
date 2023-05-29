@@ -22,6 +22,7 @@ Last "merge" date: 7th Sept 2022
     bash run_docker.sh
     ```
 1. Import the YOLOv7 and pyrealsense2 wrapper classes for inference OR use the provided scripts `scripts/inference_rs.py` `scripts/run_inference_rs.sh`
+
     ```
     import pyrealsense2 as rs
     from yolov7.yolov7 import YOLOv7
