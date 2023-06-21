@@ -9,8 +9,12 @@
 
 The following changes have been made to the original repository:
 
-- YOLOv7 has been modified to function as a package solely for inference purposes.
-- The modifications were made to the `inference` branch to enable compatibility with RealSense cameras.
+- YOLOv7 Modification:
+    - YOLOv7 has been modified to function as a **package** solely for inference purposes.
+    - Modifications were made to the `inference` branch to enable compatibility with **RealSense cameras**.
+
+- ARM Processor Support:
+    - This repository is **compatible with ARM processors**, allowing users to run the inference process on these devices.
 
 ## 1. Running on NVIDIA Jetson Xavier
 
@@ -27,47 +31,49 @@ This program should work on ARM processors in general but has only been tested o
 
 Please execute the following instructions in order when setting up a new NVIDIA Jetson Xavier.
 
-1. Flash Ubuntu
+1. **Flash Ubuntu**
 
-1. Date & Time Adustment (if applicable)
+    TODO
+
+1. **Date & Time Adustment (if applicable)**
+
     In the event that the date and time on the NVIDIA Jetson Xavier device are inaccurate, please make sure to adjust them each time the device is rebooted. Otherwise, there may be complications during program installation and execution.
 
-1. External Disk Automount Configuration
+1. **External Disk Automount Configuration**
 
     Automount the SSD/HDD/SD card onto `/mnt/rootfs`. Ensure that the disk is of Linux File System type.
 
-    Identify the **UUID** and **file system type** of your drive by executing the following command:
+    1. Identify the **UUID** and **file system type** of your drive by executing the following command:
     ```bash
     sudo blkid
     ```
 
-    Create a mount point for your drive under the `/mnt` directory. In this example, we will use `/mnt/rootfs`.
+    1. Create a mount point for your drive under the `/mnt` directory. In this example, we will use `/mnt/rootfs`.
 
     ```bash
     sudo mkdir /mnt/rootfs
     ```
 
-    Append the following line to the `/etc/fstab` file using your preferred text editor:
+    1. Append the following line to the `/etc/fstab` file using your preferred text editor:
     ```
     UUID=<uuid-of-your-drive>  <mount-point>  <file-system-type>  <mount-option>  <dump>  <pass>
     ```
-
     For example,
     ```bash
     UUID=eb67c479-962f-4bcc-b3fe-cefaf908f01e  /mnt/rootfs  ext4  defaults  0  2
     ```
 
-    Verify the automount configuration by executing the following command:
+    1. Verify the automount configuration by executing the following command:
     ```bash
     sudo mount -a
     ```
 
     For additional information and details, please refer to the following [link](https://www.linuxbabe.com/desktop-linux/how-to-automount-file-systems-on-linux).
 
-1. Docker Installation
+1. **Docker Installation**
 
-    Before proceeding with the installation of Docker, ensure that no other versions of Docker are currently installed. If any are found, please uninstall them prior to continuing. 
-    Download and install Docker for ARM using the following commands:
+    Before proceeding with the installation of Docker, ensure that no other versions of Docker are currently installed. If any are found, please **uninstall** them prior to continuing. 
+    1. Download and install Docker for ARM using the following commands:
     ```bash
     sudo apt-get update
     sudo apt-get upgrade
@@ -75,15 +81,15 @@ Please execute the following instructions in order when setting up a new NVIDIA 
     sudo usermod -aG docker $USER 
     ```
 
-    Log out of the system and then log back in to apply the group membership changes. Verify the successful installation of Docker by running the following command:
+    1. Log out of the system and then log back in to apply the group membership changes. Verify the successful installation of Docker by running the following command:
     ```bash
     docker run hello-world 
     ```
     For more detailed information and instructions, please refer to the following [link](https://www.docker.com/blog/getting-started-with-docker-for-arm-on-linux/)
 
-1. NVIDIA Container Toolkit Installation (for GPU Usage)
+1. **NVIDIA Container Toolkit Installation (for GPU Usage)**
 
-    To install the NVIDIA Container Toolkit on the NVIDIA Jetson Xavier, execute the following commands:
+    1. To install the NVIDIA Container Toolkit on the NVIDIA Jetson Xavier, execute the following commands:
     ```bash
     distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
     curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
@@ -94,16 +100,19 @@ Please execute the following instructions in order when setting up a new NVIDIA 
     sudo systemctl daemon-reload
     sudo systemctl restart docker
     ```
-    - Note: When prompted to allow changes to `/etc/docker/daemon.json` during installation, accept the changes.
+    
+    Note: When prompted to allow changes to `/etc/docker/daemon.json` during installation, accept the changes.
     For more detailed information and instructions, please refer to the following [link](https://dev.to/caelinsutch/running-docker-containers-for-the-nvidia-jetson-nano-5a06)
 
-1. Relocating Docker Storage (if required) - Insufficient Storage Capacity
+1. **Relocating Docker Storage (if required) - Insufficient Storage Capacity**
 
     Due to the limited storage capacity of the NVIDIA Jetson Xavier (16GB), it may become necessary to relocate Docker's storage location to an external hard disk. Follow the steps below:
+
+    1. Stop the Docker daemon
     ```bash
     sudo service docker stop
     ```
-    Open the /etc/docker/daemon.json file using a text editor and add the following JSON configuration:
+    1. Open the `/etc/docker/daemon.json` file using a text editor and add the following JSON configuration:
     ```json
     {
         "data-root": "/path/to/your/docker"
@@ -111,7 +120,7 @@ Please execute the following instructions in order when setting up a new NVIDIA 
     ```
     Replace `/path/to/your/docker` with the desired path on the external hard disk.
 
-    Create a new directory on the external hard disk to store Docker's data and transfer the data over. For instance, we will use the directory `/mnt/rootfs/docker`.
+    1. Create a new directory on the external hard disk to store Docker's data and transfer the data over. For instance, we will use the directory `/mnt/rootfs/docker`.
     ```bash
     sudo mkdir /mnt/rootfs/docker
     sudo rsync -aP /var/lib/docker/ /mnt/rootfs/docker
@@ -121,9 +130,9 @@ Please execute the following instructions in order when setting up a new NVIDIA 
 
     For more detailed information and instructions, please refer to the following [link](https://www.guguweb.com/2019/02/07/how-to-move-docker-data-directory-to-another-location-on-ubuntu/).
 
-1. Obtaining the Symlink for the Video Device
+1. **Obtaining the Symlink for the Video Device**
 
-    To identify the symlink of your video device, execute the following command:
+    1. To identify the symlink of your video device, execute the following command:
     ```bash
     sudo udevadm info --query=all --name=/dev/video1
     ```
