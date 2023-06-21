@@ -5,7 +5,7 @@
 - Repository Link: https://github.com/WongKinYiu/yolov7
 - Last "merge" date: 7th Sept 2022
 
-## Updates to the Repository
+### Updates to the Repository
 
 The following changes have been made to the original repository:
 
