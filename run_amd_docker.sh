@@ -1,5 +1,5 @@
-WORKSPACE=/media/data/yolov7
-DATA=/media/data/datasets
+WORKSPACE=/home/DATA/realsense/
+DATA=/home/DATA/datasets
 
 xhost +local:docker
 docker run -it --rm \
@@ -18,4 +18,4 @@ docker run -it --rm \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
   -e DISPLAY=unix$DISPLAY \
   -e QT_X11_NO_MITSHM=1 \
-	yolov7-inference-rs
+	yolov7
