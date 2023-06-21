@@ -180,7 +180,7 @@ Notes:
 1. Clone this repository and switch to the `realsense` branch
 1. Build the Docker image by executing the following command:
     ```
-    docker build -f Dockerfile.amd -t yolov7-inference-rs .
+    docker build -f Dockerfile.amd -t yolov7 .
     ```
 1. Create and enter the Docker container using the provided script:
     ```
