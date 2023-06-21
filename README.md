@@ -1,4 +1,4 @@
-# YOLOv7 Package
+# YOLOv7 Package with RealSense
 
 ## Adapted/Forked from WongKinYiu's Repository
 
