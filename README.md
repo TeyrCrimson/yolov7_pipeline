@@ -44,29 +44,28 @@ Please execute the following instructions in order when setting up a new NVIDIA 
     Automount the SSD/HDD/SD card onto `/mnt/rootfs`. Ensure that the disk is of Linux File System type.
 
     1. Identify the **UUID** and **file system type** of your drive by executing the following command:
-    ```bash
-    sudo blkid
-    ```
+        ```bash
+        sudo blkid
+        ```
 
     1. Create a mount point for your drive under the `/mnt` directory. In this example, we will use `/mnt/rootfs`.
-
-    ```bash
-    sudo mkdir /mnt/rootfs
-    ```
+        ```bash
+        sudo mkdir /mnt/rootfs
+        ```
 
     1. Append the following line to the `/etc/fstab` file using your preferred text editor:
-    ```
-    UUID=<uuid-of-your-drive>  <mount-point>  <file-system-type>  <mount-option>  <dump>  <pass>
-    ```
-    For example,
-    ```bash
-    UUID=eb67c479-962f-4bcc-b3fe-cefaf908f01e  /mnt/rootfs  ext4  defaults  0  2
-    ```
+        ```
+        UUID=<uuid-of-your-drive>  <mount-point>  <file-system-type>  <mount-option>  <dump>  <pass>
+        ```
+        For example,
+        ```bash
+        UUID=eb67c479-962f-4bcc-b3fe-cefaf908f01e  /mnt/rootfs  ext4  defaults  0  2
+        ```
 
     1. Verify the automount configuration by executing the following command:
-    ```bash
-    sudo mount -a
-    ```
+        ```bash
+        sudo mount -a
+        ```
 
     For additional information and details, please refer to the following [link](https://www.linuxbabe.com/desktop-linux/how-to-automount-file-systems-on-linux).
 
@@ -74,32 +73,32 @@ Please execute the following instructions in order when setting up a new NVIDIA 
 
     Before proceeding with the installation of Docker, ensure that no other versions of Docker are currently installed. If any are found, please **uninstall** them prior to continuing. 
     1. Download and install Docker for ARM using the following commands:
-    ```bash
-    sudo apt-get update
-    sudo apt-get upgrade
-    curl -fsSL test.docker.com -o get-docker.sh && sh get-docker.sh
-    sudo usermod -aG docker $USER 
-    ```
+        ```bash
+        sudo apt-get update
+        sudo apt-get upgrade
+        curl -fsSL test.docker.com -o get-docker.sh && sh get-docker.sh
+        sudo usermod -aG docker $USER 
+        ```
 
     1. Log out of the system and then log back in to apply the group membership changes. Verify the successful installation of Docker by running the following command:
-    ```bash
-    docker run hello-world 
-    ```
+        ```bash
+        docker run hello-world 
+        ```
     For more detailed information and instructions, please refer to the following [link](https://www.docker.com/blog/getting-started-with-docker-for-arm-on-linux/)
 
 1. **NVIDIA Container Toolkit Installation (for GPU Usage)**
 
     1. To install the NVIDIA Container Toolkit on the NVIDIA Jetson Xavier, execute the following commands:
-    ```bash
-    distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
-    curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
-    curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+        ```bash
+        distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+        curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
+        curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
 
-    sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
-    sudo apt install -y nvidia-docker2
-    sudo systemctl daemon-reload
-    sudo systemctl restart docker
-    ```
+        sudo apt-get update && sudo apt-get install -y nvidia-container-toolkit
+        sudo apt install -y nvidia-docker2
+        sudo systemctl daemon-reload
+        sudo systemctl restart docker
+        ```
     
     Note: When prompted to allow changes to `/etc/docker/daemon.json` during installation, accept the changes.
     For more detailed information and instructions, please refer to the following [link](https://dev.to/caelinsutch/running-docker-containers-for-the-nvidia-jetson-nano-5a06)
@@ -109,33 +108,33 @@ Please execute the following instructions in order when setting up a new NVIDIA 
     Due to the limited storage capacity of the NVIDIA Jetson Xavier (16GB), it may become necessary to relocate Docker's storage location to an external hard disk. Follow the steps below:
 
     1. Stop the Docker daemon
-    ```bash
-    sudo service docker stop
-    ```
+        ```bash
+        sudo service docker stop
+        ```
     1. Open the `/etc/docker/daemon.json` file using a text editor and add the following JSON configuration:
-    ```json
-    {
-        "data-root": "/path/to/your/docker"
-    }
-    ```
-    Replace `/path/to/your/docker` with the desired path on the external hard disk.
+        ```json
+        {
+            "data-root": "/path/to/your/docker"
+        }
+        ```
+        Replace `/path/to/your/docker` with the desired path on the external hard disk.
 
     1. Create a new directory on the external hard disk to store Docker's data and transfer the data over. For instance, we will use the directory `/mnt/rootfs/docker`.
-    ```bash
-    sudo mkdir /mnt/rootfs/docker
-    sudo rsync -aP /var/lib/docker/ /mnt/rootfs/docker
-    sudo mv /var/lib/docker /var/lib/docker.old
-    sudo service docker start
-    ```
+        ```bash
+        sudo mkdir /mnt/rootfs/docker
+        sudo rsync -aP /var/lib/docker/ /mnt/rootfs/docker
+        sudo mv /var/lib/docker /var/lib/docker.old
+        sudo service docker start
+        ```
 
     For more detailed information and instructions, please refer to the following [link](https://www.guguweb.com/2019/02/07/how-to-move-docker-data-directory-to-another-location-on-ubuntu/).
 
 1. **Obtaining the Symlink for the Video Device**
 
     1. To identify the symlink of your video device, execute the following command:
-    ```bash
-    sudo udevadm info --query=all --name=/dev/video1
-    ```
+        ```bash
+        sudo udevadm info --query=all --name=/dev/video1
+        ```
     Take note of the v4l `by-id` symlink information provided. 
     Update the video device symlink accordingly in `run_docker.sh` to ensure proper device mapping and usage.
 
