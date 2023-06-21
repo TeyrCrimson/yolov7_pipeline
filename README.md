@@ -5,6 +5,17 @@
 - Repository Link: https://github.com/WongKinYiu/yolov7
 - Last "merge" date: 7th Sept 2022
 
+## Table of Contents
+- [Updates to the Repository](#updates-to-the-repository)
+- [1. Running on NVIDIA Jetson Xavier](#1-running-on-nvidia-jetson-xavier)
+  - [Setup on a New Xavier](#setup-on-a-new-xavier)
+    - [Requirements](#requirements)
+    - [Setup Instructions](#setup-instructions)
+  - [Running a Live YOLOv7 Inference Script with a RealSense Camera](#running-a-live-yolov7-inference-script-with-a-realsense-camera)
+- [2. Running on AMD Processors](#2-running-on-amd-processors)
+  - [Quick Start](#quick-start)
+- [Official YOLOv7](#official-yolov7)
+
 ## Updates to the Repository
 
 The following changes have been made to the original repository:
