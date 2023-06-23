@@ -72,7 +72,7 @@ By executing the provided commands, the script will perform object detection and
 
 ## F-Beta Evaluation
 
-The test_fbeta.py script enhances the functionality of the current `test.py` script by incorporating f-beta evaluation (f1-score, f2-score) and displaying the f-beta results after the YOLOv7 evaluations in `test.py`.
+The `test_fbeta.py` script enhances the functionality of the current `test.py` script by incorporating f-beta evaluation (f1-score, f2-score) and displaying the f-beta results after the YOLOv7 evaluations in `test.py`.
 
 This evaluation utilises the [fdet-api repository](https://github.com/yhsmiley/fdet-api/) instead of `pycocotools`.
 
