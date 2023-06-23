@@ -8,6 +8,7 @@ This branch closely aligns with the official YOLOv7 repository, with the inclusi
   - [Additional Functionalities](#additional-functionalities)
     - [Conversion of Weights (for Inference Branch)](#conversion-of-weights-for-inference-branch)
     - [Detection + Tracking with DeepSORT](#detection--tracking-with-deepsort)
+    - [F-Beta Evaluation](#f-beta-evaluation)
     - [Helper Scripts](#helper-scripts)
   - [TODO](#todo)
 - [Official YOLOv7](#official-yolov7)
@@ -68,6 +69,23 @@ To run the script, follow these instructions:
     ```
 
 By executing the provided commands, the script will perform object detection and tracking using DeepSORT, either on a video or an image, depending on your chosen input source.
+
+## F-Beta Evaluation
+
+The test_fbeta.py script enhances the functionality of the current `test.py` script by incorporating f-beta evaluation (f1-score, f2-score) and displaying the f-beta results after the YOLOv7 evaluations in `test.py`.
+
+This evaluation utilises the [fdet-api repository](https://github.com/yhsmiley/fdet-api/) instead of `pycocotools`.
+
+The script accepts the same parameters as test.py, with the addition of two new parameters:
+- `--gt-file`: Specifies the JSON file containing the ground truth or true values for your test set. The default value is set to `gt.json`.
+- `--results-csv`: Specifies the output CSV file for storing the f-beta results. The default value is set to `None`.
+
+To perform the f-beta evaluation, you need to provide the `--gt-file` parameter when executing `test_fbeta.py`. The `--results-csv` parameter is optional and aids in consolidating the f-beta results when conducting multiple evaluations.
+
+Here's an example usage:
+```bash
+python test.py --data data/coco.yaml --img 640 --batch 32 --conf 0.001 --iou 0.65 --task 'test' --save-json --gt-file gt.json --results-csv ./results.csv --device 0 --weights yolov7.pt
+```
 
 ## Helper Scripts
 
