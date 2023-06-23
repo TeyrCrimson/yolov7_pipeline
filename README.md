@@ -170,7 +170,7 @@ Follow the steps below to run a live YOLOv7 inference script using a RealSense c
     1. Alternatively, you can directly use the provided scripts `xavier/inference_rs.py` or `xavier/run_inference_rs.sh` for inference:
     - Use the following command to run the inference script directly:
         ```
-        python xavier/inference_rs.py -w /path/to/weights -c /path/to/deploy/cfg --savepath /path/to/savepath --width desired_vid_width --height desired_vid_height --fps desired_fps
+        python xavier/inference_rs.py -w /path/to/weights.file -c /path/to/deploy_cfg.file --inference-folder /path/to/inference_folder --raw-video-folder /path/to/raw_video_folder --width desired_vid_width --height desired_vid_height --fps desired_fps
         ```
     - Alternatively, navigate to the `xavier` directory and execute the provided script:
         ```
