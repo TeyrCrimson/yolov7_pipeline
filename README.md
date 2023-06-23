@@ -94,7 +94,7 @@ Within the `helper` folder, you will discover various scripts, including convers
 ## TODO
 
 - [x] allow usage of coco format labels
-- [ ] add built-in support for [fdet-api](https://github.com/yhsmiley/fdet-api)
+- [x] add built-in support for [fdet-api](https://github.com/yhsmiley/fdet-api)
 - [ ] allow different backbone learning rate for training
 - [ ] gradient accumulation during training
 
