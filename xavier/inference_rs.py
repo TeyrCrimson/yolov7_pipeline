@@ -126,12 +126,6 @@ def main(args):
         cv2.putText(show_frame, f'{clsname}:{conf:0.2f}', (l, t-8), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0))
 
       inf_video_writer.write(show_frame)
-      
-      # Display the annotated frame
-      cv2.namedWindow('RealSense YOLOv7', cv2.WINDOW_AUTOSIZE)
-      cv2.imshow('RealSense YOLOv7', show_frame)
-      if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
 
       # Calculate and display FPS
       counter += 1
@@ -139,6 +133,12 @@ def main(args):
         print(f"Average FPS over past {x} seconds: {counter / (time.time() - start_time)}")
         counter = 0
         start_time = time.time()
+
+      # Display the annotated frame
+      cv2.namedWindow('RealSense YOLOv7', cv2.WINDOW_AUTOSIZE)
+      cv2.imshow('RealSense YOLOv7', show_frame)
+      if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
 
     cv2.destroyAllWindows()
     inf_video_writer.release()
