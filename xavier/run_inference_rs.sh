@@ -5,9 +5,9 @@ RAW_VIDEO_FOLDER='/mnt/rootfs/realsense/output/raw_videos'
 
 WIDTH=1280
 HEIGHT=720
-FPS=30
+FPS=5
 
-python inference_rs.py \
+python3 inference_rs.py \
   -w $WEIGHTS \
   -c $CFG \
   --bgr \
