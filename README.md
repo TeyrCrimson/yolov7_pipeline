@@ -18,12 +18,12 @@ The following changes have been made to the original repository:
 
 ## Table of Contents
 - [1. Running on NVIDIA Jetson Xavier](#1-running-on-nvidia-jetson-xavier)
-  - [Setup on a New Xavier](#setup-on-a-new-xavier)
+- [Setup on a New Xavier](#setup-on-a-new-xavier)
     - [Requirements](#requirements)
     - [Setup Instructions](#setup-instructions)
-  - [Running a Live YOLOv7 Inference Script with a RealSense Camera](#running-a-live-yolov7-inference-script-with-a-realsense-camera)
+- [Running a Live YOLOv7 Inference Script with a RealSense Camera](#running-a-live-yolov7-inference-script-with-a-realsense-camera)
 - [2. Running on AMD Processors](#2-running-on-amd-processors)
-  - [Quick Start](#quick-start)
+    - [Quick Start](#quick-start)
 - [Official YOLOv7](#official-yolov7)
 
 ## 1. Running on NVIDIA Jetson Xavier
@@ -150,6 +150,9 @@ Please execute the following instructions in order when setting up a new NVIDIA 
 
 ### Running a Live YOLOv7 Inference Script with a RealSense Camera
 
+This guide provides instructions on running a live YOLOv7 inference script using a RealSense camera. Follow the steps below to set up and run the program.
+
+#### Running the Program
 Follow the steps below to run a live YOLOv7 inference script using a RealSense camera:
 
 1. Clone this repository and switch to the `realsense` branch
@@ -182,6 +185,16 @@ Notes:
 - If the RealSense camera is not functioning, ensure that it is connected to a USB 3.0 port rather than a USB 2.0 port.
 - If you encounter any issues, consider checking the device configuration in the `./run_docker` script if you are not using the RealSense D455 camera.
 - For debugging purposes, you can download and use the [realsense-viewer application](https://dev.intelrealsense.com/docs/nvidia-jetson-tx2-installation).
+
+
+#### Camera Configuration
+
+The camera configuration, including fps, width, and height, may vary for each RealSense camera. In our tests, we used the **RealSense camera D455** on the NVIDIA Jetson Xavier, which runs at a maximum of:
+
+- 1280x720: ~6fps (use 5fps)
+- 640x480: ~8fps (use 5fps)
+
+To determine the appropriate configuration for your camera, you can run a test using `xavier/bash_run_inference.sh` with your desired width and height parameters. Take note of the **fps** value printed out during the test. It is important to use this fps value as the input for both your desired width and height parameters when running the inference script. Failure to provide the correct fps will result in the saved videos (inference, raw) being fast-forwarded or slowed down.
 
 ## 2. Running on AMD Processors
 
