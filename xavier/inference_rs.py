@@ -153,7 +153,7 @@ if __name__ == "__main__":
   # YOLOv7 parameters
   parser.add_argument('-w', '--weights', type=Path, required=True, help='Path to YOLOv7 weights')
   parser.add_argument('-c', '--cfg', type=Path, required=True, help='Path to YOLOv7 config file')
-  parser.add_argument('--bgr', action='store_true', help='Set to use BGR color space (default: BGR)')
+  parser.add_argument('--bgr', action='store_true', help='Set to use BGR color space (default: RGB)')
   parser.add_argument('--gpu_device', type=int, default=0, help='GPU device index (default: 0)')
   parser.add_argument('--model_image_size', type=int, default=1280, help='Input image size for the model (default: 640)')
   parser.add_argument('--max_batch_size', type=int, default=64, help='Maximum batch size for inference (default: 64)')
