@@ -156,9 +156,13 @@ This guide provides instructions on running a live YOLOv7 inference script using
 Follow the steps below to run a live YOLOv7 inference script using a RealSense camera:
 
 1. Clone this repository and switch to the `realsense` branch
-1. Build the Docker image by executing the following command:
+1. **Option 1: Build the Docker image:** Execute the following command to build the Docker image:
     ```
     docker build -f Dockerfile.xav -t yolov7 .
+    ```
+    **Option 2: Pull the Docker image from Docker Hub:** Run the following command to pull the pre-built Docker image:
+    ```
+    docker pull tehwenyi/yolov7-realsense-arm:latest
     ```
 1. Create and enter the Docker container using the provided script:
     ```
