@@ -1,9 +1,10 @@
-# randomly splits folder into train and val
+# The provided script performs the task of splitting images and corresponding labels into train and validation (and optionally test) sets.
+import argparse
 from glob import glob
-from random import shuffle
 from pathlib import Path
 import shutil
-import click
+from random import shuffle
+
 
 class SplitTrainVal:
 
@@ -39,13 +40,12 @@ class SplitTrainVal:
         if Path.exists(image_filename):
           break
       else:
-        print(f"WARNING: Unable to find corresponding image for label {label}")
+        print(f"WARNING: Unable to find corresponding image of extensions {img_exts} for label {label}")
         continue
       image_dst = op_img_parent_folder / image_filename.name
       label_dst = op_label_parent_folder / label_path.name
       shutil.copy(str(image_filename), str(image_dst))
       shutil.copy(str(label), str(label_dst))
-
 
   def run(self, split_test=False):
     all_labels = glob(str(self.labels_folder) + "/*.txt")
@@ -57,7 +57,6 @@ class SplitTrainVal:
     if split_test:
       val_ratio = round(1.0 - self.train - self.test, 4) # floating point precision issues
       val_percentage_of_remaining = val_ratio / (val_ratio + self.test)
-      # num_of_val_images = int(val_ratio * num_of_images)
       num_of_val_images = int((num_of_images - num_of_train_images) * val_percentage_of_remaining)
     else:
       num_of_val_images = num_of_images - num_of_train_images
@@ -80,25 +79,13 @@ class SplitTrainVal:
     else:
       print(f"Final split of {num_of_images} images: {{ Train: {self.train:.2f} ({num_of_train_images}), Val: {(1.0 - self.train):.2f} ({num_of_val_images}) }}")
 
-@click.command()
-@click.argument('input_folder')
-@click.argument('output_folder')
-@click.option('-t', '--test') # split into test folder as well
 def main(input_folder, output_folder, test):
   if test:
     print(f"Splitting into train, val and test folders")
-    SplitTrainVal(
-      input_folder=input_folder,
-      output_folder=output_folder
-    ).run(
-      split_test=True
-      )
+    SplitTrainVal(input_folder=input_folder, output_folder=output_folder).run(split_test=True)
   else:
     print(f"Splitting into train and val folders")
-    SplitTrainVal(
-      input_folder=input_folder,
-      output_folder=output_folder
-    ).run()
+    SplitTrainVal(input_folder=input_folder, output_folder=output_folder).run()
   
   # Clean up: Deleting original `images` and `labels` folders if input_folder == output_folder
   if input_folder == output_folder:
@@ -109,4 +96,10 @@ def main(input_folder, output_folder, test):
   print("Success!")
 
 if __name__ == "__main__":
-  main()
+  parser = argparse.ArgumentParser()
+  parser.add_argument('input_folder', help="Path to the input folder")
+  parser.add_argument('output_folder', help="Path to the output folder")
+  parser.add_argument('-t', '--test', action='store_true', help="Split into test folder as well")
+  args = parser.parse_args()
+
+  main(args.input_folder, args.output_folder, args.test)
