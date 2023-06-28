@@ -10,7 +10,8 @@ This branch closely aligns with the official YOLOv7 repository, with the inclusi
     - [Detection + Tracking with DeepSORT](#detection--tracking-with-deepsort)
     - [F-Beta Evaluation](#f-beta-evaluation)
     - [Helper Scripts](#helper-scripts)
-  - [TODO](#todo)
+  - [Notes](#notes)
+    - [Training](#training)
 - [Official YOLOv7](#official-yolov7)
   - [Web Demo](#web-demo)
   - [Performance](#performance)
@@ -70,7 +71,7 @@ To run the script, follow these instructions:
 
 By executing the provided commands, the script will perform object detection and tracking using DeepSORT, either on a video or an image, depending on your chosen input source.
 
-## F-Beta Evaluation
+### F-Beta Evaluation
 
 The `test_fbeta.py` script enhances the functionality of the current `test.py` script by incorporating f-beta evaluation (f1-score, f2-score) and displaying the f-beta results after the YOLOv7 evaluations in `test.py`.
 
@@ -87,16 +88,26 @@ Here's an example usage:
 python test.py --data data/coco.yaml --img 640 --batch 32 --conf 0.001 --iou 0.65 --task 'test' --save-json --gt-file gt.json --results-csv ./results.csv --device 0 --weights yolov7.pt
 ```
 
-## Helper Scripts
+### Helper Scripts
 
 Within the `helper` folder, you will discover various scripts, including conversion scripts. For detailed information on these helper functions, please refer to the [Helper Function README](https://github.com/DinoHub/yolov7_pipeline/blob/main/helper/README.md).
 
-## TODO
+## Notes
 
-- [x] allow usage of coco format labels
-- [x] add built-in support for [fdet-api](https://github.com/yhsmiley/fdet-api)
-- [ ] allow different backbone learning rate for training
-- [ ] gradient accumulation during training
+### Training
+
+- **Varying training image size:** In YOLOv7, all input training images must have the same size, which is specified using the `--img` parameter in the `train.py` script.
+
+- **Optimal training image size:** It is recommended to train the model using training images that have the **same size** as the desired inference image size. If you are using SAHI, you can train the model using SAHI's inference size.
+
+- **Training rectangular images:** To train models using non-square images, you can use the `--rect` flag during training and specify the **longer side** of the image in the `img-size` parameter.  
+    Additionally, you will need to **modify the hyperparameters** in the hyp parameter file located in `/data/` by setting `loss_ota=0.0` (default is 1.0). 
+    Here's an example usage for training a 1280x720 image:
+    ```bash
+    python train.py --workers 8 --device 0 --batch-size 32 --data data/coco.yaml --img 1280 1280 --rect --cfg cfg/training/yolov7.yaml --weights '' --name yolov7 --hyp data/hyp.scratch.p5.yaml
+    ```
+    For more information and a detailed discussion, you can refer to the GitHub issue [here](https://github.com/WongKinYiu/yolov7/issues/1536).
+
 
 # Official YOLOv7
 Implementation of paper - [YOLOv7: Trainable bag-of-freebies sets new state-of-the-art for real-time object detectors](https://arxiv.org/abs/2207.02696)
