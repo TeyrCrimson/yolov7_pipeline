@@ -36,16 +36,3 @@ Visualise a YOLO dataset image and its annotations
 
 Relevant script:
 - `yolo_annotator.py`
-
-## Evaluation Functions
-### Evaluating F-Beta scores
-To evaluate F-Beta scores (F1-Score & F2-Score), you can do it individually (`evaluate_fbeta.py`) or in a batch (`batch_evaluate_fbeta.py`).
-Currently, the batch function evaluates slices of 50 to 1000 with a step size of 50
-
-This function requires the generated `prediction.json` and the ground-truth json, both in COCO annotation format.
-
-To generate the `prediction.json` in yolov7, simply add `--save-json` as a parameter when running `test.py`, or use `run_batch_test.sh`/`run_test.sh` in this repo
-
-Relevant scripts:
-- `evaluate_fbeta.py` / `run_evaluate_fbeta.sh`
-- `batch_evaluate_fbeta.py`
