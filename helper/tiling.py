@@ -2,7 +2,7 @@
 # eg. python tiling.py /home/wenyi/DATA/synthetics/DOTA_yolo_small_vehs_only/ /home/wenyi/DATA/synthetics/DOTA_yolo_small_vehs_only_TILED/
 
 from pathlib import Path
-import click
+import argparse
 import pandas as pd
 import numpy as np
 from PIL import Image
@@ -10,7 +10,7 @@ from shapely.geometry import Polygon, Point
 from matplotlib import pyplot as plt
 import os
 
-def tile_images(dir, op_dir, slice_size, falsepath):
+def tile_images(dir, op_dir, slice_size, negative_samples_path):
   img_path = str(dir / "images")
   labels_path = str(dir / "labels")
   new_img_path = str(op_dir / "images")
@@ -18,9 +18,9 @@ def tile_images(dir, op_dir, slice_size, falsepath):
   Path(new_img_path).mkdir(parents=True, exist_ok=True)
   Path(new_labels_path).mkdir(parents=True, exist_ok=True)
   
-  if falsepath:
-    (Path(falsepath) / "images").mkdir(parents=True, exist_ok=True)
-    (Path(falsepath) / "labels").mkdir(parents=True, exist_ok=True)
+  if negative_samples_path:
+    (Path(negative_samples_path) / "images").mkdir(parents=True, exist_ok=True)
+    (Path(negative_samples_path) / "labels").mkdir(parents=True, exist_ok=True)
 
   # tile all images in a loop
   for t, img_filename in enumerate(os.listdir(img_path)):
@@ -110,36 +110,30 @@ def tile_images(dir, op_dir, slice_size, falsepath):
           slice_df = pd.DataFrame(slice_labels, columns=['class', 'x1', 'y1', 'w', 'h'])
           slice_df.to_csv(slice_labels_path, sep=' ', index=False, header=False, float_format='%.6f')
         
-        # if falsepath is indicated & there are no bounding boxes intersect current tile, save this tile to a separate folder
-        if falsepath and not imsaved:
+        # if negative_samples_path is indicated & there are no bounding boxes intersect current tile, save this tile to a separate folder
+        if negative_samples_path and not imsaved:
           sliced = imr[i*slice_size:(i+1)*slice_size, j*slice_size:(j+1)*slice_size]
           sliced_im = Image.fromarray(sliced)
           rgb_im = sliced_im.convert('RGB')
 
           # save the image file and generate the label file
-          slice_path = Path(falsepath) / 'images' / f'{imname}_{i}_{j}{imext}'
+          slice_path = Path(negative_samples_path) / 'images' / f'{imname}_{i}_{j}{imext}'
           rgb_im.save(str(slice_path))
-          empty_label_path = Path(falsepath) / 'labels' / f'{imname}_{i}_{j}.txt'
+          empty_label_path = Path(negative_samples_path) / 'labels' / f'{imname}_{i}_{j}.txt'
           with open(str(empty_label_path), 'w') as f:
             pass
 
           imsaved = True
 
-
-@click.command()
-@click.argument('dataset_directory')
-@click.argument('output_folder')
-@click.option('-f', '--falsepath')
-@click.option('--size', default=640)
-def main(dataset_directory, output_folder, falsepath, size):
+def main(dataset_directory, output_folder, negative_samples_path, size):
   # printing config
   print(f"slice size: {size}")
-  if not falsepath:
-    print("no falsepath indicated. empty tiles will be thrown away")
+  if not negative_samples_path:
+    print("no negative_samples_path indicated. empty tiles will be thrown away")
 
-  if falsepath is not None and not os.path.isdir(falsepath):
-    (Path(falsepath) / 'images').mkdir(parents=True, exist_ok=True)
-    (Path(falsepath) / 'labels').mkdir(parents=True, exist_ok=True)
+  if negative_samples_path is not None and not os.path.isdir(negative_samples_path):
+    (Path(negative_samples_path) / 'images').mkdir(parents=True, exist_ok=True)
+    (Path(negative_samples_path) / 'labels').mkdir(parents=True, exist_ok=True)
 
   output_path = Path(output_folder)
   if (Path(dataset_directory) / "images").is_dir() and (Path(dataset_directory) / "labels").is_dir():
@@ -147,7 +141,7 @@ def main(dataset_directory, output_folder, falsepath, size):
       print(f"output folder {str(output_path)} does not exist. creating...")
       output_path.mkdir(parents=True, exist_ok=True)
     print(f"tiling '{dataset_directory}' into '{output_path}'")
-    tile_images(Path(dataset_directory), output_path, size, falsepath)
+    tile_images(Path(dataset_directory), output_path, size, negative_samples_path)
   else:
     sub_folders = [x for x in Path(dataset_directory).iterdir() if x.is_dir()]
     for i, sub_folder in enumerate(sub_folders):
@@ -157,11 +151,18 @@ def main(dataset_directory, output_folder, falsepath, size):
           print(f"output folder {str(op_folder)} does not exist. creating...")
           op_folder.mkdir(parents=True, exist_ok=True)
         print(f"{i + 1} of {len(sub_folders)}: tiling '{sub_folder}' into '{op_folder}'")
-        tile_images(sub_folder, op_folder, size, falsepath)
+        tile_images(sub_folder, op_folder, size, negative_samples_path)
       else:
         print(f"cannot find 'images' or 'labels' folder in {sub_folder}. skipping tiling this folder...")
   
   print("completed")
 
-if __name__ == "__main__":
-  main()
+if __name__ == '__main__':
+  parser = argparse.ArgumentParser()
+  parser.add_argument('dataset_directory', help='path to the dataset directory')
+  parser.add_argument('output_folder', help='path to the target output folder')
+  parser.add_argument('-f', '--negative_samples_path', help='path to where the negative samples should be saved')
+  parser.add_argument('--size', type=int, default=640, help='slice size (default: 640)')
+  args = parser.parse_args()
+
+  main(args.dataset_directory, args.output_folder, args.negative_samples_path, args.size)
