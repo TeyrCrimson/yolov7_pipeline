@@ -1,7 +1,7 @@
 # This program annotates images in the YOLO format. It takes a dataset folder or a single image as input and displays each image for annotation. 
 # Press 'q' to exit or any other key to move to the next image.
 
-# Usage: python annotate_images.py /path/to/dataset/folder -s .jpg -n image1
+# Usage: python annotate_images.py /path/to/dataset/folder -e .jpg -n image1
 from pathlib import Path
 import random
 import cv2
@@ -52,7 +52,7 @@ def annotate_images(folder, files_to_annotate, img_suffix):
 def main():
   parser = argparse.ArgumentParser(description="Annotate an image with the YOLO format")
   parser.add_argument("folder", type=Path, help="Path to the dataset folder (i.e. contains the 'images' and 'labels' folders)")
-  parser.add_argument("-s", "--suffix", default=".png", help="Image suffix (default: .png)")
+  parser.add_argument("-e", "--ext", default=".png", help="Image extension with the dot (default: .png)")
   parser.add_argument("-n", "--name", help="Name of specific image without the ext (optional)")
 
   args = parser.parse_args()
@@ -66,7 +66,7 @@ def main():
       filename = Path(img).stem
       files_to_annotate.append(filename)
 
-  annotate_images(args.folder, files_to_annotate, args.suffix)
+  annotate_images(args.folder, files_to_annotate, args.ext)
 
 if __name__ == "__main__":
     main()
