@@ -1,14 +1,12 @@
-# python yolo_to_coco.py --path /home/wenyi/DATA/synthetics/yolo_dota_train_vehs_TILED/ --output test.json --numerical-img-id False
+# python yolo_to_coco.py -p /path/to/images -o ./train_coco.json --numerical-img-id False
 from pathlib import Path
 
-import cv2
 import argparse
 import json
-import numpy as np
 import imagesize
 
 #################################################
-# Change the classes depend on your own dataset.#
+# Change the classes below depending on your own dataset.#
 # Don't change the list name 'Classes'          #
 #################################################
 
