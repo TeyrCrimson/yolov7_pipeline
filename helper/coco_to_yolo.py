@@ -1,12 +1,13 @@
-# converts datasets in COCO format (images in a folder + coco.json) to YOLO format
-# python coco_to_yolo.py $IMG_FOLDER $JSON_PATH $OUTPUT_PATH
-import click
-from turtle import ycor
+# Converts datasets in COCO format (images in a folder + coco.json) to YOLO format (only for HBBs)
+
+# Example usage:
+# python coco_to_yolo.py /path/to/images /path/to/annotations.json /path/to/output
+import argparse
 import cv2
 import json
+import shutil
 from pathlib import Path
 from glob import glob
-import shutil
 
 class ConvertCOCOToYOLO:
 
@@ -140,17 +141,18 @@ class ConvertCOCOToYOLO:
         self.copy_images()
         print("Success!")
 
-
-@click.command()
-@click.argument('img_folder')
-@click.argument('json_path')
-@click.argument('output_path')
 def main(img_folder, json_path, output_path):
     ConvertCOCOToYOLO(
-      img_folder=img_folder,
-      json_path=json_path,
-      output_path=output_path
+        img_folder=img_folder,
+        json_path=json_path,
+        output_path=output_path
     ).run()
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Convert COCO format annotations to YOLO format")
+    parser.add_argument("img_folder", help="Path to the image folder")
+    parser.add_argument("json_path", help="Path to the COCO JSON file")
+    parser.add_argument("output_path", help="Path to the output folder")
+    args = parser.parse_args()
+
+    main(args.img_folder, args.json_path, args.output_path)
