@@ -10,13 +10,10 @@ from yolov7.yolov7 import YOLOv7
 
 def inference_live_video(args):
     yolov7 = YOLOv7(
-        # weights=files('yolov7').joinpath('weights/reparam_best.pt'),
         weights=files('yolov7').joinpath(args.yolov7_weights),
-        # cfg=files('yolov7').joinpath('cfg/deploy/cfg.yaml'),
         cfg=files('yolov7').joinpath(args.yolov7_cfg),
         bgr=True,
         gpu_device=0,
-        # model_image_size=640,
         model_image_size=1280,
         max_batch_size=64,
         half=True,
@@ -43,20 +40,13 @@ def inference_live_video(args):
     fps = 25 if math.isinf(fps) else fps
     vid_width = int(vidcap.get(cv2.CAP_PROP_FRAME_WIDTH))
     vid_height = int(vidcap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    viewMode = None
-    if vid_height > vid_width:
-        print('[INFO] Portrait video detected')
-        viewMode == "portrait"
     out_track = cv2.VideoWriter(str(out_fp), cv2.VideoWriter_fourcc(*'MJPG'), fps, (vid_width, vid_height))
-    # out_track = cv2.VideoWriter(str(out_fp), cv2.VideoWriter_fourcc(*'MJPG'), fps, (vid_height, vid_width))
 
     if display_video:
         cv2.namedWindow('YOLOv7', cv2.WINDOW_NORMAL)
 
     while True:
         ret, frame = vidcap.read()
-        # if viewMode == "portrait": 
-        # frame = cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE) 
         if not ret:
             break
 
