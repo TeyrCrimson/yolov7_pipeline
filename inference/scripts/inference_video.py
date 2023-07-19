@@ -30,7 +30,7 @@ def inference_video(args):
 
         output_dir = Path(args.output_dir)
         output_dir.mkdir(parents=True, exist_ok=True)
-        out_fp = output_dir / args.output_vid
+        out_fp = output_dir / (datetime.now().strftime("%m-%d-%Y/%H-%M-%S") + '.avi')
         out_fp.parent.mkdir(parents=True, exist_ok=True)
         print(out_fp)
         display_video = args.display_video
@@ -82,7 +82,6 @@ parser.add_argument('--yolov7_weights', help='.pt file for the yolov7 model to p
 parser.add_argument('--yolov7_cfg', help='.yaml file for the yolov7 model to point to', default='cfg/deploy/yolov7-tiny.yaml')
 parser.add_argument('--vid_folder', help='location of video source. Can be either filepath or URL', default='inference/vids')
 parser.add_argument('--output_dir', help='directory to save the inferenced video', default='inference')
-parser.add_argument('--output_vid', help='relative path of the final save location w.r.t. output_dir', default=datetime.now().strftime("%m-%d-%Y/%H-%M-%S") + '.avi')
 parser.add_argument('-d', '--display_video', help='Indicate if you want the video to be shown when inferencing', action='store_true')
 
 args = parser.parse_args()
